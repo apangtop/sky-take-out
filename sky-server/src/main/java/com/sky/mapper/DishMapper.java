@@ -1,12 +1,17 @@
 package com.sky.mapper;
 
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 
-/**
- * @Author: tangjie
- * @Description: TODO
- * @DateTime: 2024/8/10 20:48
- **/
 @Mapper
-public class DishMapper {
+public interface DishMapper {
+
+    /**
+     * 根据分类id查询菜品数量
+     * @param categoryId
+     * @return
+     */
+    @Select("select count(id) from dish where category_id = #{categoryId}")
+    Integer countByCategoryId(Long categoryId);
+
 }
