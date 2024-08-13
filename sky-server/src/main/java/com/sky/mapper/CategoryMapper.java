@@ -8,6 +8,8 @@ import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Update;
 
+import java.util.List;
+
 /**
 * @author 唐诗杰
 * @description 针对表【category(菜品及套餐分类)】的数据库操作Mapper
@@ -31,6 +33,8 @@ public interface CategoryMapper {
 
    @Delete("delete from category where id=#{id}")
     void delete(Long id);
+
+    List<Category> list(Integer type);
 }
 
 

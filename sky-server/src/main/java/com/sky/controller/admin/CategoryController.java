@@ -18,6 +18,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 /**
  * 分类管理
  */
@@ -103,13 +105,10 @@ public class CategoryController {
      * 根据类型查询分类
      * @return
      */
+    @GetMapping("/list")
     @ApiOperation("根据类型查询分类")
-    @GetMapping("list")
-    public Result QueryByType(CategoryPageQueryDTO categoryPageQueryDTO)
-    {
-        log.info("分类分页查询,参数为:",categoryPageQueryDTO);
-        PageResult pageResult=categoryService.PageQuery(categoryPageQueryDTO);
-        log.info("查询的数据为:{}",pageResult);
-        return Result.success(pageResult);
+    public Result<List<Category>> list(Integer type){
+        List<Category> list = categoryService.list(type);
+        return Result.success(list);
     }
 }
