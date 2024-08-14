@@ -165,4 +165,9 @@ public class DishServiceImpl implements DishService {
 
     }
 
+    @Override
+    public void StopOrStartDish(String status, String id) {
+        dishMapper.StopOrStartDish(status,id);
+    }
+
 }

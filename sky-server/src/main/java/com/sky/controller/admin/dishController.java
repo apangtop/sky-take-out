@@ -84,6 +84,14 @@ public class dishController {
         return Result.success();
     }
 
+    @ApiOperation("菜品起售停售")
+    @PostMapping("status/{status}")
+    public Result StopOrStartDish(@PathVariable String status,String id)
+    {
+        log.info("菜品禁用或启用");
+        service.StopOrStartDish(status,id);
+        return Result.success();
+    }
 
 
 

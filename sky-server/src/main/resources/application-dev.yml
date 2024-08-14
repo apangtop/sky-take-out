@@ -11,4 +11,8 @@ sky:
     access-key-id: LTAI5tEQ57AEKMrhZTMAVg2N
     access-key-secret: FhbrmsxXZDDEkxokjS6OGiGDWAFHjV
     bucket-name: apang
+  redis:
+    host: 47.109.184.51
+    port: 6379
+    password: 123456
 
