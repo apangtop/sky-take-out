@@ -23,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import javax.swing.text.Utilities;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -169,5 +170,22 @@ public class DishServiceImpl implements DishService {
     public void StopOrStartDish(String status, String id) {
         dishMapper.StopOrStartDish(status,id);
     }
+
+    @Override
+    public List<DishVO> listWithFlavor(Dish dish) {
+        List<Dish> list=dishMapper.list(dish);
+        List<DishVO> dishVOList = new ArrayList<>();
+
+        for (Dish D:list) {
+            DishVO dishVO = new DishVO();
+            BeanUtils.copyProperties(D,dishVO);
+
+            List<DishFlavor> byDishId = dishFlavorMapper.getByDishId(D.getId());
+            dishVO.setFlavors(byDishId);
+            dishVOList.add(dishVO);
+       }
+        return dishVOList;
+    }
+
 
 }

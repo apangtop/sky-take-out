@@ -1,9 +1,7 @@
 package com.sky.controller.admin;
 
-import com.alibaba.druid.sql.visitor.functions.Substring;
 import com.sky.dto.DishDTO;
 import com.sky.dto.DishPageQueryDTO;
-import com.sky.entity.Dish;
 import com.sky.result.PageResult;
 import com.sky.result.Result;
 import com.sky.service.DishService;
@@ -25,7 +23,7 @@ import java.util.List;
 @Slf4j
 @Api(tags = "菜品相关接口")
 @RequestMapping("/admin/dish")
-public class dishController {
+public class DishController {
 
     @Autowired
    private DishService service;

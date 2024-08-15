@@ -73,4 +73,7 @@ public interface DishMapper {
 
     @Update("update dish set status=#{status} where id=#{id}")
     void StopOrStartDish(String status, String id);
+
+    @Select("select * from dish where category_id=#{categoryId} and status=#{status}")
+    List<Dish> list(Dish dish);
 }
