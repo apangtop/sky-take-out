@@ -183,12 +183,12 @@ public class OrderServiceImpl implements OrderService {
 
         //通过websocket向客户端浏览器推送消息 type orderId content
         Map map = new HashMap();
-        map.put("type",1); // 1表示来单提醒 2表示客户催单
-        map.put("orderId",ordersDB.getId());
-        map.put("content","订单号：" + outTradeNo);
-
+        map.put("type",1);//1表示来单提醒2表示客户催单
+        map.put("content","订单号："+outTradeNo);
         String json = JSON.toJSONString(map);
         webSocketServer.sendToAllClient(json);
+
+
     }
 
     @Override
@@ -354,6 +354,67 @@ public class OrderServiceImpl implements OrderService {
         return orderVO;
     }
 
+    /**
+     * 客户催单
+     * @param id
+     */
+    @Override
+    public void reminder(Long id) {
+        //根据di查询订单
+        Orders ordersDB = orderMapper.getById(id);
+
+        //检验订单是否存在，并且状态为4
+        if (ordersDB==null)
+        {
+            throw  new OrderBusinessException(MessageConstant.ORDER_STATUS_ERROR);
+        }
+
+        Map map = new HashMap();
+        map.put("type",2);
+        map.put("orderId",id);
+        map.put("content","订单号:"+ordersDB.getNumber());
+        String json = JSON.toJSONString(map);
+        webSocketServer.sendToAllClient(json);
+
+    }
+
+    /**
+     * 用户查询历史订单
+     * @param page
+     * @param pagesize
+     * @param status
+     * @return
+     */
+    @Override
+    public PageResult pageQueryforUser(int pagenum, int pagesize, Integer status) {
+        //设置分页
+        PageHelper.startPage(pagenum, pagesize);
+        OrdersPageQueryDTO ordersPageQueryDTO = new OrdersPageQueryDTO();
+        ordersPageQueryDTO.setUserId(BaseContext.getCurrentId());
+        ordersPageQueryDTO.setStatus(status);
+
+        //分页条件查询
+        Page<Orders> page = orderMapper.pageQuery(ordersPageQueryDTO);
+        ArrayList list = new ArrayList();
+
+        //查询出订单明细，并封装OrderVo进行响应
+        if (page != null && page.getTotal() > 0) {
+            for (Orders orders : page) {
+                Long orderId = orders.getId();// 订单id
+
+                // 查询订单明细
+                List<OrderDetail> orderDetails = orderDetailMapper.getByOrderId(orderId);
+
+                OrderVO orderVO = new OrderVO();
+                BeanUtils.copyProperties(orders, orderVO);
+                orderVO.setOrderDetailList(orderDetails);
+
+                list.add(orderVO);
+            }
+        }
+        return new PageResult(page.getTotal(), list);
+    }
+
 
     private List<OrderVO> getOrderVOList(Page<Orders> page) {
         // 需要返回订单菜品信息，自定义OrderVO响应结果
@@ -394,4 +455,7 @@ public class OrderServiceImpl implements OrderService {
         // 将该订单对应的所有菜品信息拼接在一起
         return String.join("", orderDishList);
     }
+
+
+
 }

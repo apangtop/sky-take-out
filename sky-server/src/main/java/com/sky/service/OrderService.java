@@ -79,4 +79,19 @@ public interface OrderService {
      * @return
      */
     OrderVO details(Long id);
+
+    /**
+     * 客户催单
+     * @param id
+     */
+    void reminder(Long id);
+
+    /**
+     * 用户查询历史订单
+     * @param page
+     * @param pagesize
+     * @param status
+     * @return
+     */
+    PageResult pageQueryforUser(int page, int pagesize, Integer status);
 }
